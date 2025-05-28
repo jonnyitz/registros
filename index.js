@@ -9,7 +9,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  const db = mysql.createConnection({
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
