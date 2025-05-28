@@ -9,13 +9,11 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  port: process.env.MYSQL_PORT
+  host: 'localhost',
+  user: 'root',
+  password: 'Jonathan4.',  // pon tu contraseña
+  database: 'vehiculos'
 });
-
 
 db.connect(err => {
   if (err) {
@@ -84,8 +82,7 @@ app.post('/vehiculos', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
 });
-
