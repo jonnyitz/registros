@@ -16,7 +16,7 @@ const db = mysql.createConnection({
   port: process.env.MYSQLPORT
 });
 
-});
+
 
 db.connect(err => {
   if (err) {
