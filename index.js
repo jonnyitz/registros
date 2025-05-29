@@ -10,11 +10,11 @@ app.use(bodyParser.json());
 
 // conexión a la base de datos
 const db = mysql.createConnection({
-  DB_HOST = mysql.railway.internal
-  DB_PORT = 3306
-  DB_USER = raíz
-  DB_PASSWORD = vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC
-  DB_NAME = ferrocarril
+ host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 
 });
 
