@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2'); // usa solo mysql2
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -8,16 +8,14 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
+// conexión a la base de datos
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 });
-
 
 db.connect(err => {
   if (err) {
@@ -74,7 +72,7 @@ app.post('/vehiculos', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma, luego puedes manejarlo
+    null // firma
   ];
 
   db.query(sql, values, (err, result) => {
