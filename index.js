@@ -83,10 +83,9 @@ app.post('/vehiculos', (req, res) => {
   });
 });
 
-// Ruta GET para obtener todos los vehículos
+// Nueva ruta GET para listar vehículos guardados
 app.get('/vehiculos', (req, res) => {
   const sql = 'SELECT * FROM registros';
-
   db.query(sql, (err, results) => {
     if (err) {
       console.error('Error al obtener vehículos:', err);
@@ -100,4 +99,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
 });
-
