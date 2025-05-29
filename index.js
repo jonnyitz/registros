@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: 'trolley.proxy.rlwy.net',
+ host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
@@ -80,18 +80,6 @@ app.post('/vehiculos', (req, res) => {
       return res.status(500).json({ error: 'Error al guardar vehículo' });
     }
     res.json({ message: 'Vehículo guardado', id: result.insertId });
-  });
-});
-
-// Nueva ruta GET para listar vehículos guardados
-app.get('/vehiculos', (req, res) => {
-  const sql = 'SELECT * FROM registros';
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error('Error al obtener vehículos:', err);
-      return res.status(500).json({ error: 'Error al obtener vehículos' });
-    }
-    res.json(results);
   });
 });
 
