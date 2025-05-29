@@ -10,11 +10,11 @@ app.use(bodyParser.json());
 
 // conexión a la base de datos
 const db = mysql.createConnection({
- host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+ host: 'trolley.proxy.rlwy.net',
+  port: 25676,
+  user: 'root',
+  password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
+  database: 'railway'
 
 });
 
