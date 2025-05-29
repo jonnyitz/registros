@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// CONEXIÓN A BASE DE DATOS EN RAILWAY
 const db = mysql.createConnection({
   host: 'trolley.proxy.rlwy.net',
   port: 25676,
@@ -19,36 +20,33 @@ const db = mysql.createConnection({
 db.connect(err => {
   if (err) {
     console.error('Error al conectar a MySQL:', err);
-    process.exit(1);
+    process.exit(1); // Finaliza si hay error
   }
   console.log('Conectado a la base de datos MySQL');
 });
 
-// POST en raíz /
+// GET desde raíz → https://practical-dedication-production.up.railway.app/
+app.get('/', (req, res) => {
+  db.query('SELECT * FROM registros', (err, results) => {
+    if (err) {
+      console.error('Error al obtener registros:', err);
+      return res.status(500).json({ error: 'Error al obtener registros' });
+    }
+    res.json(results);
+  });
+});
+
+// POST también en raíz → útil para guardar nuevos registros
 app.post('/', (req, res) => {
   const data = req.body;
 
   const sql = `
     INSERT INTO registros (
-      nombre_conductor,
-      nombre_acompanante,
-      tipo_vehiculo,
-      marca,
-      placas,
-      destino,
-      proyecto,
-      hora_salida,
-      hora_regreso,
-      actividad,
-      km_salida,
-      km_regreso,
-      combustible,
-      observaciones,
-      licencia,
-      tarjeta_circulacion,
-      verificacion_vigente,
-      poliza_seguro,
-      firma
+      nombre_conductor, nombre_acompanante, tipo_vehiculo,
+      marca, placas, destino, proyecto, hora_salida,
+      hora_regreso, actividad, km_salida, km_regreso,
+      combustible, observaciones, licencia, tarjeta_circulacion,
+      verificacion_vigente, poliza_seguro, firma
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -71,7 +69,7 @@ app.post('/', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma
+    null // firma, opcional
   ];
 
   db.query(sql, values, (err, result) => {
@@ -83,17 +81,7 @@ app.post('/', (req, res) => {
   });
 });
 
-// GET en raíz /
-app.get('/', (req, res) => {
-  db.query('SELECT * FROM registros', (err, results) => {
-    if (err) {
-      console.error('Error al obtener vehículos:', err);
-      return res.status(500).json({ error: 'Error al obtener vehículos' });
-    }
-    res.json(results);
-  });
-});
-
+// Asegúrate de usar el puerto que Railway asigna
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
