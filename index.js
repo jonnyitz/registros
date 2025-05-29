@@ -24,8 +24,8 @@ db.connect(err => {
   console.log('Conectado a la base de datos MySQL');
 });
 
-// Ruta POST para guardar vehículo
-app.post('/vehiculos', (req, res) => {
+// POST en raíz /
+app.post('/', (req, res) => {
   const data = req.body;
 
   const sql = `
@@ -83,8 +83,8 @@ app.post('/vehiculos', (req, res) => {
   });
 });
 
-// Ruta GET para obtener todos los vehículos
-app.get('/vehiculos', (req, res) => {
+// GET en raíz /
+app.get('/', (req, res) => {
   db.query('SELECT * FROM registros', (err, results) => {
     if (err) {
       console.error('Error al obtener vehículos:', err);
