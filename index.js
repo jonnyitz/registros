@@ -1,4 +1,4 @@
- const express = require('express');
+const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
- host: 'trolley.proxy.rlwy.net',
+  host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
@@ -50,7 +50,7 @@ app.post('/vehiculos', (req, res) => {
       poliza_seguro,
       firma
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+  `;
 
   const values = [
     data.conductor || null,
@@ -71,7 +71,7 @@ app.post('/vehiculos', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma, luego puedes manejarlo
+    null // firma
   ];
 
   db.query(sql, values, (err, result) => {
@@ -80,6 +80,17 @@ app.post('/vehiculos', (req, res) => {
       return res.status(500).json({ error: 'Error al guardar vehículo' });
     }
     res.json({ message: 'Vehículo guardado', id: result.insertId });
+  });
+});
+
+// Ruta GET para obtener todos los vehículos
+app.get('/vehiculos', (req, res) => {
+  db.query('SELECT * FROM registros', (err, results) => {
+    if (err) {
+      console.error('Error al obtener vehículos:', err);
+      return res.status(500).json({ error: 'Error al obtener vehículos' });
+    }
+    res.json(results);
   });
 });
 
