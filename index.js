@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2'); // usa solo mysql2
+const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -8,14 +8,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// conexión a la base de datos
 const db = mysql.createConnection({
- host: 'trolley.proxy.rlwy.net',
+  host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
   database: 'railway'
-
 });
 
 db.connect(err => {
@@ -73,7 +71,7 @@ app.post('/vehiculos', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma
+    null // firma, luego puedes manejarlo
   ];
 
   db.query(sql, values, (err, result) => {
@@ -85,7 +83,20 @@ app.post('/vehiculos', (req, res) => {
   });
 });
 
-const PORT = 3000;
+// Ruta GET para obtener todos los vehículos
+app.get('/vehiculos', (req, res) => {
+  const sql = 'SELECT * FROM registros';
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error al obtener vehículos:', err);
+      return res.status(500).json({ error: 'Error al obtener vehículos' });
+    }
+    res.json(results);
+  });
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
 });
