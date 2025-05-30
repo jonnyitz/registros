@@ -9,13 +9,17 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // CONEXIÓN A BASE DE DATOS EN RAILWAY
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
-  database: 'railway'
+  database: 'railway',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
+
 
 db.connect(err => {
   if (err) {
