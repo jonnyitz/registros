@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// CONEXIÓN A BASE DE DATOS EN RAILWAY
+// Conexión usando pool
 const db = mysql.createPool({
   host: 'trolley.proxy.rlwy.net',
   port: 25676,
@@ -20,16 +20,7 @@ const db = mysql.createPool({
   queueLimit: 0
 });
 
-
-db.connect(err => {
-  if (err) {
-    console.error('Error al conectar a MySQL:', err);
-    process.exit(1); // Finaliza si hay error
-  }
-  console.log('Conectado a la base de datos MySQL');
-});
-
-// GET desde raíz → https://practical-dedication-production.up.railway.app/
+// GET desde raíz
 app.get('/', (req, res) => {
   db.query('SELECT * FROM registros', (err, results) => {
     if (err) {
@@ -40,7 +31,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// POST también en raíz → útil para guardar nuevos registros
+// POST en raíz
 app.post('/', (req, res) => {
   const data = req.body;
 
@@ -73,7 +64,7 @@ app.post('/', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma, opcional
+    null // firma
   ];
 
   db.query(sql, values, (err, result) => {
@@ -85,7 +76,7 @@ app.post('/', (req, res) => {
   });
 });
 
-// Asegúrate de usar el puerto que Railway asigna
+// Escuchar en el puerto asignado por Railway o local
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
