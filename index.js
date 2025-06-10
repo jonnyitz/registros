@@ -74,9 +74,7 @@ app.post('/', (req, res) => {
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
-
- 
- const values = [
+const values = [
   data.conductor || null,
   data.acompanante || null,
   data.tipoVehiculo || null,
@@ -95,9 +93,10 @@ app.post('/', (req, res) => {
   data.tarjetaCirculacion ? 1 : 0,
   data.verificacion ? 1 : 0,
   data.polizaSeguro ? 1 : 0,
-  data.firma || null,       // Aquí faltaba agregar firma desde data
+  data.firma || null,  // si usas firma, ponla aquí, no null fijo
   data.imagen_url || null
 ];
+
 
   db.query(sql, values, (err, result) => {
    if (err) {
