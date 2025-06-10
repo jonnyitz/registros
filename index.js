@@ -38,6 +38,17 @@ app.get('/agregar-columna-imagen', (req, res) => {
   });
 });
 
+// NUEVO ENDPOINT PARA VER LA ESTRUCTURA DE LA TABLA
+app.get('/describe', (req, res) => {
+  db.query('DESCRIBE registros', (err, results) => {
+    if (err) {
+      console.error('Error al describir la tabla:', err);
+      return res.status(500).json({ error: 'Error al describir la tabla' });
+    }
+    res.json(results);
+  });
+});
+
 // GET desde raíz → https://practical-dedication-production.up.railway.app/
 app.get('/', (req, res) => {
   db.query('SELECT * FROM registros', (err, results) => {
@@ -53,45 +64,51 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   const data = req.body;
 
-  const sql = `
-    INSERT INTO registros (
-      nombre_conductor, nombre_acompanante, tipo_vehiculo,
-      marca, placas, destino, proyecto, hora_salida,
-      hora_regreso, actividad, km_salida, km_regreso,
-      combustible, observaciones, licencia, tarjeta_circulacion,
-      verificacion_vigente, poliza_seguro, firma, imagen_url
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ const sql = `
+  INSERT INTO registros (
+  nombre_conductor, nombre_acompanante, tipo_vehiculo,
+  marca, placas, destino, proyecto, hora_salida,
+  hora_regreso, actividad, km_salida, km_regreso,
+  combustible, observaciones, licencia, tarjeta_circulacion,
+  verificacion_vigente, poliza_seguro, firma, imagen_url
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
   `;
+ 
+const values = [
+  data.nombre_conductor || null,
+  data.nombre_acompanante || null,
+  data.tipo_vehiculo || null,
+  data.marca || null,
+  data.placas || null,
+  data.destino || null,
+  data.proyecto || null,
+  data.hora_salida || null,
+  data.hora_regreso || null,
+  data.actividad || null,
+  parseInt(data.km_salida) || 0,
+  parseInt(data.km_regreso) || 0,
+  data.combustible || null,
+  data.observaciones || null,
+  data.licencia ? 1 : 0,
+  data.tarjeta_circulacion ? 1 : 0,
+  data.verificacion_vigente ? 1 : 0,
+  data.poliza_seguro ? 1 : 0,
+  data.firma || null,
+  data.imagen_url || null
+];
 
-  const values = [
-    data.conductor || null,
-    data.acompanante || null,
-    data.tipoVehiculo || null,
-    data.marca || null,
-    data.placas || null,
-    data.destino || null,
-    data.proyecto || null,
-    data.horaSalida || null,
-    data.horaRegreso || null,
-    data.actividad || null,
-    parseInt(data.kmSalida) || 0,
-    parseInt(data.kmRegreso) || 0,
-    data.combustible || null,
-    data.observaciones || null,
-    data.licencia ? 1 : 0,
-    data.tarjetaCirculacion ? 1 : 0,
-    data.verificacion ? 1 : 0,
-    data.polizaSeguro ? 1 : 0,
-    null, // firma, opcional
-    data.imagen_url || null  // Aquí la URL de la imagen
 
-  ];
+ // Aquí los console.log para depurar
+  console.log('SQL:', sql);
+  console.log('Values:', values);
+  console.log('BODY:', req.body);
 
   db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al guardar vehículo:', err);
-      return res.status(500).json({ error: 'Error al guardar vehículo' });
-    }
+   if (err) {
+  console.error('Error al guardar vehículo:', err);
+  return res.status(500).json({ error: err.sqlMessage || err.message || 'Error desconocido' });
+}
     res.json({ message: 'Vehículo guardado', id: result.insertId });
   });
 });
