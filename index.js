@@ -38,6 +38,17 @@ app.get('/agregar-columna-imagen', (req, res) => {
   });
 });
 
+// NUEVO ENDPOINT PARA VER LA ESTRUCTURA DE LA TABLA
+app.get('/describe', (req, res) => {
+  db.query('DESCRIBE registros', (err, results) => {
+    if (err) {
+      console.error('Error al describir la tabla:', err);
+      return res.status(500).json({ error: 'Error al describir la tabla' });
+    }
+    res.json(results);
+  });
+});
+
 // GET desde raíz → https://practical-dedication-production.up.railway.app/
 app.get('/', (req, res) => {
   db.query('SELECT * FROM registros', (err, results) => {
