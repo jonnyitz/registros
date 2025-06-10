@@ -96,7 +96,9 @@ const values = [
   data.firma || null,  // si usas firma, ponla aquí, no null fijo
   data.imagen_url || null
 ];
-
+ // Aquí los console.log para depurar
+  console.log('SQL:', sql);
+  console.log('Values:', values);
 
   db.query(sql, values, (err, result) => {
    if (err) {
