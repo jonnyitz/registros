@@ -8,19 +8,37 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Conexión usando pool
-const db = mysql.createPool({
+// CONEXIÓN A BASE DE DATOS EN RAILWAY
+const db = mysql.createConnection({
   host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
-  database: 'railway',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  database: 'railway'
 });
 
-// GET desde raíz
+db.connect(err => {
+  if (err) {
+    console.error('Error al conectar a MySQL:', err);
+    process.exit(1); // Finaliza si hay error
+  }
+  console.log('Conectado a la base de datos MySQL');
+});
+
+// ENDPOINT para agregar la columna imagen_url
+app.get('/agregar-columna-imagen', (req, res) => {
+  const sql = `ALTER TABLE registros ADD COLUMN imagen_url VARCHAR(255)`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error al agregar columna:', err);
+      return res.status(500).json({ error: 'No se pudo agregar la columna, probablemente ya exista' });
+    }
+    res.json({ message: 'Columna imagen_url agregada correctamente' });
+  });
+});
+
+// GET desde raíz → https://practical-dedication-production.up.railway.app/
 app.get('/', (req, res) => {
   db.query('SELECT * FROM registros', (err, results) => {
     if (err) {
@@ -31,7 +49,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// POST en raíz
+// POST también en raíz → útil para guardar nuevos registros
 app.post('/', (req, res) => {
   const data = req.body;
 
@@ -41,7 +59,7 @@ app.post('/', (req, res) => {
       marca, placas, destino, proyecto, hora_salida,
       hora_regreso, actividad, km_salida, km_regreso,
       combustible, observaciones, licencia, tarjeta_circulacion,
-      verificacion_vigente, poliza_seguro, firma
+      verificacion_vigente, poliza_seguro, firma, imagen_url
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -64,7 +82,9 @@ app.post('/', (req, res) => {
     data.tarjetaCirculacion ? 1 : 0,
     data.verificacion ? 1 : 0,
     data.polizaSeguro ? 1 : 0,
-    null // firma
+    null, // firma, opcional
+    data.imagen_url || null  // Aquí la URL de la imagen
+
   ];
 
   db.query(sql, values, (err, result) => {
@@ -76,7 +96,7 @@ app.post('/', (req, res) => {
   });
 });
 
-// Escuchar en el puerto asignado por Railway o local
+// Asegúrate de usar el puerto que Railway asigna
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
