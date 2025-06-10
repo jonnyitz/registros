@@ -99,10 +99,10 @@ app.post('/', (req, res) => {
   ];
 
   db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al guardar vehículo:', err);
-      return res.status(500).json({ error: 'Error al guardar vehículo' });
-    }
+   if (err) {
+  console.error('Error al guardar vehículo:', err);
+  return res.status(500).json({ error: err.sqlMessage || err.message || 'Error desconocido' });
+}
     res.json({ message: 'Vehículo guardado', id: result.insertId });
   });
 });
