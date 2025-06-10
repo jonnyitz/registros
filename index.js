@@ -65,13 +65,14 @@ app.post('/', (req, res) => {
   const data = req.body;
 
  const sql = `
-    INSERT INTO registros (
-      nombre_conductor, nombre_acompanante, tipo_vehiculo,
-      marca, placas, destino, proyecto, hora_salida,
-      hora_regreso, actividad, km_salida, km_regreso,
-      combustible, observaciones, licencia, tarjeta_circulacion,
-      verificacion_vigente, poliza_seguro, firma, imagen_url
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO registros (
+  nombre_conductor, nombre_acompanante, tipo_vehiculo,
+  marca, placas, destino, proyecto, hora_salida,
+  hora_regreso, actividad, km_salida, km_regreso,
+  combustible, observaciones, licencia, tarjeta_circulacion,
+  verificacion_vigente, poliza_seguro, firma, imagen_url
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
   `;
 
   const values = [
