@@ -75,29 +75,29 @@ app.post('/', (req, res) => {
 
   `;
  
-const values = [
-  data.nombre_conductor || null,
-  data.nombre_acompanante || null,
-  data.tipo_vehiculo || null,
-  data.marca || null,
-  data.placas || null,
-  data.destino || null,
-  data.proyecto || null,
-  data.hora_salida || null,
-  data.hora_regreso || null,
-  data.actividad || null,
-  parseInt(data.km_salida) || 0,
-  parseInt(data.km_regreso) || 0,
-  data.combustible || null,
-  data.observaciones || null,
-  data.licencia ? 1 : 0,
-  data.tarjeta_circulacion ? 1 : 0,
-  data.verificacion_vigente ? 1 : 0,
-  data.poliza_seguro ? 1 : 0,
-  data.firma || null,
-  data.imagen_url || null
-];
+ const values = [
+    data.conductor || null,
+    data.acompanante || null,
+    data.tipoVehiculo || null,
+    data.marca || null,
+    data.placas || null,
+    data.destino || null,
+    data.proyecto || null,
+    data.horaSalida || null,
+    data.horaRegreso || null,
+    data.actividad || null,
+    parseInt(data.kmSalida) || 0,
+    parseInt(data.kmRegreso) || 0,
+    data.combustible || null,
+    data.observaciones || null,
+    data.licencia ? 1 : 0,
+    data.tarjetaCirculacion ? 1 : 0,
+    data.verificacion ? 1 : 0,
+    data.polizaSeguro ? 1 : 0,
+    null, // firma, opcional
+    data.imagen_url || null  // Aquí la URL de la imagen
 
+  ];
 
  // Aquí los console.log para depurar
   console.log('SQL:', sql);
