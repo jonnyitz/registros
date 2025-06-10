@@ -64,39 +64,40 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   const data = req.body;
 
-  const sql = `
-    INSERT INTO registros (
-      nombre_conductor, nombre_acompanante, tipo_vehiculo,
-      marca, placas, destino, proyecto, hora_salida,
-      hora_regreso, actividad, km_salida, km_regreso,
-      combustible, observaciones, licencia, tarjeta_circulacion,
-      verificacion_vigente, poliza_seguro, firma, imagen_url
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+ const sql = `
+  INSERT INTO registros (
+    nombre_conductor, nombre_acompanante, tipo_vehiculo,
+    marca, placas, destino, proyecto, hora_salida,
+    hora_regreso, actividad, km_salida, km_regreso,
+    combustible, observaciones, licencia, tarjeta_circulacion,
+    verificacion_vigente, poliza_seguro, firma, imagen_url
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
-  const values = [
-    data.conductor || null,
-    data.acompanante || null,
-    data.tipoVehiculo || null,
-    data.marca || null,
-    data.placas || null,
-    data.destino || null,
-    data.proyecto || null,
-    data.horaSalida || null,
-    data.horaRegreso || null,
-    data.actividad || null,
-    parseInt(data.kmSalida) || 0,
-    parseInt(data.kmRegreso) || 0,
-    data.combustible || null,
-    data.observaciones || null,
-    data.licencia ? 1 : 0,
-    data.tarjetaCirculacion ? 1 : 0,
-    data.verificacion ? 1 : 0,
-    data.polizaSeguro ? 1 : 0,
-    null, // firma, opcional
-    data.imagen_url || null  // Aquí la URL de la imagen
 
-  ];
+ 
+ const values = [
+  data.conductor || null,
+  data.acompanante || null,
+  data.tipoVehiculo || null,
+  data.marca || null,
+  data.placas || null,
+  data.destino || null,
+  data.proyecto || null,
+  data.horaSalida || null,
+  data.horaRegreso || null,
+  data.actividad || null,
+  parseInt(data.kmSalida) || 0,
+  parseInt(data.kmRegreso) || 0,
+  data.combustible || null,
+  data.observaciones || null,
+  data.licencia ? 1 : 0,
+  data.tarjetaCirculacion ? 1 : 0,
+  data.verificacion ? 1 : 0,
+  data.polizaSeguro ? 1 : 0,
+  data.firma || null,       // Aquí faltaba agregar firma desde data
+  data.imagen_url || null
+];
 
   db.query(sql, values, (err, result) => {
    if (err) {
