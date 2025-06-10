@@ -76,9 +76,9 @@ app.post('/', (req, res) => {
   `;
  
 const values = [
-  data.nombre_conductor ,
-  data.nombre_acompanante,
-  data.tipo_vehiculo,
+  data.nombre_conductor || null,
+  data.nombre_acompanante || null,
+  data.tipo_vehiculo || null,
   data.marca || null,
   data.placas || null,
   data.destino || null,
