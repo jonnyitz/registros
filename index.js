@@ -74,6 +74,13 @@ app.post('/', (req, res) => {
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
   `;
+  VALUES (
+  'Juan Pérez', 'Luis García', 'Camioneta',
+  'Toyota', 'XYZ-123', 'Oficina Central', 'Proyecto X', '08:00:00',
+  '17:30:00', 'Supervisión', 120, 140,
+  'Gasolina', 'Sin novedades', 1, 1,
+  1, 1, 'firma123', 'http://misitio.com/imagen.png'
+);
 const values = [
   data.nombre_conductor || null,
   data.nombre_acompanante || null,
