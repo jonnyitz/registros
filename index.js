@@ -59,8 +59,10 @@ app.get('/', (req, res) => {
 
     // Convertir el campo 'firma' de Buffer a string base64 con prefijo de imagen
     const registrosConFirma = results.map(registro => {
-      if (registro.firma && Buffer.isBuffer(registro.firma)) {
-        registro.firma = 'data:image/png;base64,' + registro.firma.toString('base64');
+     if (registro.firma && Buffer.isBuffer(registro.firma)) {
+        const base64Str = registro.firma.toString('base64');
+        // Mostrar solo primeros 30 caracteres + '...'
+        registro.firma = 'data:image/png;base64,' + base64Str.substring(0, 30) + '...';
       }
       return registro;
     });
