@@ -56,9 +56,19 @@ app.get('/', (req, res) => {
       console.error('Error al obtener registros:', err);
       return res.status(500).json({ error: 'Error al obtener registros' });
     }
-    res.json(results);
+
+    // Convertir el campo 'firma' de Buffer a string base64 con prefijo de imagen
+    const registrosConFirma = results.map(registro => {
+      if (registro.firma && Buffer.isBuffer(registro.firma)) {
+        registro.firma = 'data:image/png;base64,' + registro.firma.toString('base64');
+      }
+      return registro;
+    });
+
+    res.json(registrosConFirma);
   });
 });
+
 
 // POST también en raíz → útil para guardar nuevos registros
 app.post('/', (req, res) => {
