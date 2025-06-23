@@ -9,13 +9,23 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // CONEXIÓN A BASE DE DATOS EN RAILWAY
-const db = mysql.createConnection({
+// db.js o al inicio de tu archivo si no lo separas en módulos
+const mysql = require('mysql2');
+
+// POOL DE CONEXIONES A RAILWAY
+const pool = mysql.createPool({
   host: 'trolley.proxy.rlwy.net',
   port: 25676,
   user: 'root',
   password: 'vaLprXySwDUQwAwZVSXTMfDkJvRkzaHC',
-  database: 'railway'
+  database: 'railway',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
+
+module.exports = pool.promise(); // Para usar con async/await
+
 
 db.connect(err => {
   if (err) {
